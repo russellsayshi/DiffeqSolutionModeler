@@ -1,3 +1,5 @@
+package diffeq.math;
+
 /**
  * This class is just a matrix
  * with only one column.

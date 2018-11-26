@@ -1,3 +1,5 @@
+package diffeq.math;
+
 /**
  * This class just holds a matrix and lets
  * you multiply it by a vector (array) to
