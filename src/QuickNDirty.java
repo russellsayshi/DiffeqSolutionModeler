@@ -24,15 +24,16 @@ import java.awt.*;
 
 public class QuickNDirty extends JPanel {
 	final double[][] mat = {{0, 2}, {2, 1}};
-	final double[] val = {-20, -20};
-	final double[] dval1 = {0, 4};
-	final double[] dval2 = {4, 0};
+	final double[] val = {-50, -50};
+	final double[] dval1 = {0, 2};
+	final double[] dval2 = {2, 0};
 	final boolean colorTrans = true; //vectors change color as time passes
-	final int numVecs1 = 10;
-	final int numVecs2 = 10;
-	final double step = 0.01;
-	final int numCalcs = 20;
-	final double startX = -20, startY = -20, endX = 20, endY = 20;
+	final boolean gridLines = true;
+	final int numVecs1 = 51;
+	final int numVecs2 = 51;
+	final double step = 0.1;
+	final int numCalcs = 5;
+	final double startX = -50, startY = -50, endX = 50, endY = 50;
 
 	public QuickNDirty() {}
 
@@ -40,8 +41,8 @@ public class QuickNDirty extends JPanel {
 		JFrame frame = new JFrame("DIFFEQ SOLUTIONS");
 		frame.setContentPane(new QuickNDirty());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(800, 600);
 		frame.setLocationRelativeTo(null);
-		frame.setSize(600, 400);
 		frame.setVisible(true);
 	}
 
@@ -64,11 +65,13 @@ public class QuickNDirty extends JPanel {
 		Graphics2D g = (Graphics2D)gOld;
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.setColor(new Color(200, 200, 200));
-		for(int x = (int)startX; x < (int)endX; x++) {
-			for(int y = (int)startY; y < (int)endY; y++) {
-				drawLine(g, startX, y, endX, y);
-				drawLine(g, x, startY, x, endY);
+		if(gridLines) {
+			g.setColor(new Color(200, 200, 200));
+			for(int x = (int)startX; x < (int)endX; x++) {
+				for(int y = (int)startY; y < (int)endY; y++) {
+					drawLine(g, startX, y, endX, y);
+					drawLine(g, x, startY, x, endY);
+				}
 			}
 		}
 		g.setColor(Color.BLACK);
