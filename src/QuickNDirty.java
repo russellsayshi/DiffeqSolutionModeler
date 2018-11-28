@@ -17,18 +17,21 @@ import java.awt.*;
  * the step in euler's approximation for diffeqs,
  * and numCalcs determines the number of steps.
  * the startX, startY, etc. determine your window.
+ * Graph of lines starts blue and then turns green
+ * slowly.
  * Hopefully someone will find this useful.
  */
 
 public class QuickNDirty extends JPanel {
-	final double[][] mat = {{1, 0}, {2, 1}};
+	final double[][] mat = {{0, 2}, {2, 1}};
 	final double[] val = {-20, -20};
-	final double[] dval1 = {0, 1};
-	final double[] dval2 = {1, 0};
-	final int numVecs1 = 40;
-	final int numVecs2 = 40;
-	final double step = 0.1;
-	final int numCalcs = 100;
+	final double[] dval1 = {0, 4};
+	final double[] dval2 = {4, 0};
+	final boolean colorTrans = true; //vectors change color as time passes
+	final int numVecs1 = 10;
+	final int numVecs2 = 10;
+	final double step = 0.01;
+	final int numCalcs = 20;
 	final double startX = -20, startY = -20, endX = 20, endY = 20;
 
 	public QuickNDirty() {}
@@ -61,18 +64,29 @@ public class QuickNDirty extends JPanel {
 		Graphics2D g = (Graphics2D)gOld;
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight());
+		g.setColor(new Color(200, 200, 200));
+		for(int x = (int)startX; x < (int)endX; x++) {
+			for(int y = (int)startY; y < (int)endY; y++) {
+				drawLine(g, startX, y, endX, y);
+				drawLine(g, x, startY, x, endY);
+			}
+		}
 		g.setColor(Color.BLACK);
 		drawLine(g, startX, 0, endX, 0);
 		drawLine(g, 0, startY, 0, endY);
-		g.setColor(Color.BLUE);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		if(!colorTrans) g.setColor(new Color(0, 150, 200));
 		double[] initialValueStart = {val[0], val[1]};
 		for(int a = 0; a < numVecs1; a++) {
 			double[] initialValue = {initialValueStart[0], initialValueStart[1]};
 			for(int b = 0; b < numVecs2; b++) {
+				//g.setColor(new Color(((a ^ b) * 30) % 256, (a * 30) % 256, (b * 30) % 256));
 				double[] v = {initialValue[0], initialValue[1]};
 				for(int o = 0; o < numCalcs; o++) {
 					double[] vOld = {v[0], v[1]};
 					updateVec(v, mat, step);
+					//System.out.println((int)(((double)o)/numCalcs*255));
+					if(colorTrans) g.setColor(new Color(0, 150, 255-(int)(((double)o)/numCalcs*255)));
 					drawLine(g, vOld[0], vOld[1], v[0], v[1]);
 				}
 				initialValue[0] += dval2[0];
